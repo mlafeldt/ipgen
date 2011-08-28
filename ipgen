@@ -28,7 +28,14 @@ def main(argv=None):
     if argv == None:
         argv = sys.argv
 
-    for subnet in argv[1:]:
+    try:
+        template = argv[1]
+        f = open(template, 'r')
+        lines = [l.strip() for l in f.readlines() if l.strip() and not l.startswith('#')]
+    except IOError, e:
+        sys.exit(e)
+
+    for subnet in argv[2:]:
         if '/' in subnet:
             ip, mask = subnet.split('/', 1)
         else:
@@ -47,7 +54,11 @@ def main(argv=None):
         except (ValueError, socket.error):
             sys.exit('error: invalid subnet mask: %s' % mask)
 
-        print '\n'.join(ip_generator(ip_num, mask_num))
+        if template is not None:
+            for ip in ip_generator(ip_num, mask_num):
+                print '\n'.join([l.replace('__IP__', ip) for l in lines])
+        else:
+            print '\n'.join(ip_generator(ip_num, mask_num))
 
 if __name__ == '__main__':
     try:

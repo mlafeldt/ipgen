@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+import sys
+import socket
+import struct
+
+def dqn_to_int(ip):
+    """Convert dotted quad string to long integer"""
+    return struct.unpack('!L', socket.inet_aton(ip))[0]
+
+def int_to_dqn(n):
+    """Convert long integer to dotted quad string"""
+    return socket.inet_ntoa(struct.pack('!L', n))
+
+def cidr_to_int(cidr):
+    """Convert CIDR to long integer"""
+    return 0xffffffff ^ (1L << 32 - cidr) - 1
+
+def ip_generator(ip, mask):
+    """Generate IPs as dotted quad strings"""
+    i = start = ip & mask
+    end = start | (~mask & 0xffffffff)
+    while i <= end:
+        yield int_to_dqn(i)
+        i += 1
+
+def main(argv=None):
+    if argv == None:
+        argv = sys.argv
+
+    for subnet in argv[1:]:
+        if '/' in subnet:
+            ip, mask = subnet.split('/', 1)
+        else:
+            ip, mask = subnet, str(32)
+
+        try:
+            ip_num = dqn_to_int(ip)
+        except socket.error:
+            sys.exit('error: invalid subnet address: %s' % ip)
+
+        try:
+            if '.' in mask:
+                mask_num = dqn_to_int(mask)
+            else:
+                mask_num = cidr_to_int(int(mask))
+        except (ValueError, socket.error):
+            sys.exit('error: invalid subnet mask: %s' % mask)
+
+        print '\n'.join(ip_generator(ip_num, mask_num))
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        sys.exit('Aborting.')

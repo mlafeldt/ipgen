@@ -3,6 +3,7 @@
 import sys
 import socket
 import struct
+import optparse
 
 def dqn_to_int(ip):
     """Convert dotted quad string to long integer"""
@@ -40,24 +41,28 @@ def parse_subnet(subnet):
 
     return ip_num, mask_num
 
-def main(argv=None):
-    if argv == None:
-        argv = sys.argv
+def main():
+    parser = optparse.OptionParser()
+    parser.add_option('-t', '--template', action='store')
+    opts, args = parser.parse_args()
 
-    try:
-        template = argv[1]
-        f = open(template, 'r')
-        lines = [l.strip() for l in f.readlines() if l.strip() and not l.startswith('#')]
-    except IOError, e:
-        sys.exit(e)
+    if not len(args):
+        sys.exit('error: subnet missing')
 
-    for subnet in argv[2:]:
+    if opts.template:
+        try:
+            f = open(opts.template, 'r')
+            lines = [l.strip() for l in f.readlines() if l.strip() and not l.startswith('#')]
+        except IOError, e:
+            sys.exit(e)
+
+    for subnet in args:
         try:
             ip_num, mask_num = parse_subnet(subnet)
         except (ValueError, socket.error):
             sys.exit('error: invalid subnet string: %s' % subnet)
 
-        if template is not None:
+        if opts.template:
             for ip in ip_generator(ip_num, mask_num):
                 print '\n'.join([l.replace('__IP__', ip) for l in lines])
         else:

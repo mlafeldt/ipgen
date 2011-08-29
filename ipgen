@@ -43,6 +43,8 @@ def parse_subnet(subnet):
 
     return ip_num, mask_num
 
+IP_IDENT = '$IP'
+
 def main():
     parser = optparse.OptionParser()
     parser.add_option('-t', '--template', action='store')
@@ -66,7 +68,7 @@ def main():
 
         if opts.template:
             for ip in ip_generator(ip_num, mask_num):
-                print '\n'.join((l.replace('__IP__', ip) for l in lines))
+                print '\n'.join((l.replace(IP_IDENT, ip) for l in lines))
         else:
             print '\n'.join(ip_generator(ip_num, mask_num))
 

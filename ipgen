@@ -56,7 +56,7 @@ def main():
     if opts.template:
         try:
             f = open(opts.template, 'r')
-            lines = [l.strip() for l in f.readlines() if not l.startswith('#')]
+            lines = [l.strip() for l in f if not l.startswith('#')]
         except IOError:
             sys.exit('error: failed to read template: %s' % opts.template)
 

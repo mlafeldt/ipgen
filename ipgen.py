@@ -7,17 +7,23 @@ import socket
 import struct
 import optparse
 
+IP_IDENT = '$IP'
+
+
 def dqn_to_int(ip):
     """Convert dotted quad string to long integer"""
     return struct.unpack('!L', socket.inet_aton(ip))[0]
+
 
 def int_to_dqn(n):
     """Convert long integer to dotted quad string"""
     return socket.inet_ntoa(struct.pack('!L', n))
 
+
 def cidr_to_int(cidr):
     """Convert CIDR to long integer"""
     return 0xffffffff ^ (1L << 32 - cidr) - 1
+
 
 def ip_generator(ip, mask):
     """Generate IPs as dotted quad strings"""
@@ -26,6 +32,7 @@ def ip_generator(ip, mask):
     while i <= end:
         yield int_to_dqn(i)
         i += 1
+
 
 def parse_subnet(subnet):
     """Parse subnet string to get IP and mask as integers"""
@@ -43,7 +50,6 @@ def parse_subnet(subnet):
 
     return ip_num, mask_num
 
-IP_IDENT = '$IP'
 
 def main():
     parser = optparse.OptionParser()

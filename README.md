@@ -9,7 +9,7 @@ Usage
 
 Generate all IP addresses of a Class C network:
 
-    $ ipgen 192.168.0.0/255.255.255.0
+    $ ipgen.py 192.168.0.0/255.255.255.0
     192.168.0.0
     192.168.0.1
     192.168.0.2
@@ -20,7 +20,7 @@ Generate all IP addresses of a Class C network:
 
 Lazy people can use the CIDR notation:
 
-    $ ipgen 10.0.0.0/16
+    $ ipgen.py 10.0.0.0/16
     10.0.0.0
     10.0.0.1
     10.0.0.2
@@ -31,7 +31,7 @@ Lazy people can use the CIDR notation:
 
 You can pass it as many subnets as you want:
 
-    $ ipgen 192.168.0.0/30 1.2.3.4/32 10.0.0.0/255.255.255.128
+    $ ipgen.py 192.168.0.0/30 1.2.3.4/32 10.0.0.0/255.255.255.128
     192.168.0.0
     192.168.0.1
     192.168.0.2

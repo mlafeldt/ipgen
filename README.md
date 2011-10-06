@@ -57,5 +57,5 @@ See LICENSE file.
 Contact
 -------
 
-* Web: <https://github.com/misfire/ipgen>
+* Web: <https://github.com/mlafeldt/ipgen>
 * Mail: <mathias.lafeldt@gmail.com>

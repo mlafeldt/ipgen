@@ -1,0 +1,132 @@
+ipgen(1) - generate IP addresses
+================================
+
+
+## SYNOPSIS
+
+`ipgen` [--help] [--template <file>] [<subnet>]...
+
+
+## DESCRIPTION
+
+`ipgen` is a simple command-line tool to generate the IPv4 addresses for one or
+more subnets and output them in dotted quad format. It also comes with a
+template system to insert the generated IP addresses into pre-defined text
+snippets.
+
+
+## OPTIONS
+
+  * `-h`, `--help`:
+    Show a help message describing all available options.
+
+  * `-t`, `--template` <file>:
+    Path to template file. See section [TEMPLATES] for more.
+
+  * <subnet>:
+    Subnet IP address and mask in format 192.168.0.0/255.255.255.0 or
+    192.168.0.0/24. For convenience, a single address can be written as
+    192.168.0.100 instead of 192.168.0.100/32. With more than one subnet,
+    corresponding IPs are generated in order of appearance.
+
+
+## TEMPLATES
+
+By default, `ipgen` merely outputs each generated IP address, one per line.
+When a template file is specified, the tool instead reads the file's contents,
+substitutes all occurrences of the special keyword `$IP` with the generated IP
+address, and outputs the result.
+
+In this example, the template `example.in` is applied to four IP addresses:
+
+    $ cat example.in
+    The current IP is $IP. Congrats.
+
+    $ ipgen -t example.in 192.168.0.0/30
+    The current IP is 192.168.0.0. Congrats.
+    The current IP is 192.168.0.1. Congrats.
+    The current IP is 192.168.0.2. Congrats.
+    The current IP is 192.168.0.3. Congrats.
+
+In template files, `#` denotes a comment which is stripped off.
+
+## EXAMPLES
+
+Generate all IP addresses of a Class C network:
+
+    $ ipgen 192.168.0.0/255.255.255.0
+    192.168.0.0
+    192.168.0.1
+    192.168.0.2
+    ...
+    192.168.0.253
+    192.168.0.254
+    192.168.0.255
+
+The shorter CIDR notation is supported too:
+
+    $ ipgen 10.0.0.0/16
+    10.0.0.0
+    10.0.0.1
+    10.0.0.2
+    ...
+    10.0.255.253
+    10.0.255.254
+    10.0.255.255
+
+Process as many subnets as you want:
+
+    $ ipgen 192.168.0.0/30 1.2.3.4/32 10.0.0.0/255.255.255.128
+    192.168.0.0
+    192.168.0.1
+    192.168.0.2
+    192.168.0.3
+    1.2.3.4
+    10.0.0.0
+    10.0.0.1
+    10.0.0.2
+    ...
+    10.0.0.125
+    10.0.0.126
+    10.0.0.127
+
+Based on a template, generate RADIUS requests that can be directly passed to
+(and transmitted by) radclient(1):
+
+    $ cat subscriber-start.in
+    User-Name = "$IP"
+    Framed-IP-Address = $IP
+    Acct-Status-Type = Start
+    (empty line to separate RADIUS requests)
+
+    $ ipgen -t subscriber-start.in 192.168.0.0/24
+    User-Name = "192.168.0.0"
+    Framed-IP-Address = 192.168.0.0
+    Acct-Status-Type = Start
+
+    User-Name = "192.168.0.1"
+    Framed-IP-Address = 192.168.0.1
+    Acct-Status-Type = Start
+
+    ...
+
+    User-Name = "192.168.0.255"
+    Framed-IP-Address = 192.168.0.255
+    Acct-Status-Type = Start
+
+    $ ipgen -t subscriber-start.in 192.168.0.0/24 | radclient <target> acct <password>
+
+
+## SEE ALSO
+
+radclient(1)
+
+
+## AUTHOR
+
+Written by Mathias Lafeldt <mathias.lafeldt@gmail.com>
+
+
+## DOCUMENTATION
+
+Documentation by Mathias Lafeldt <mathias.lafeldt@gmail.com>

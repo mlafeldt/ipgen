@@ -7,51 +7,13 @@ Simple command-line tool to generate IP addresses.
 Usage
 -----
 
-Generate all IP addresses of a Class C network:
-
-    $ ipgen.py 192.168.0.0/255.255.255.0
-    192.168.0.0
-    192.168.0.1
-    192.168.0.2
-    ...
-    192.168.0.253
-    192.168.0.254
-    192.168.0.255
-
-Lazy people can use the CIDR notation:
-
-    $ ipgen.py 10.0.0.0/16
-    10.0.0.0
-    10.0.0.1
-    10.0.0.2
-    ...
-    10.0.255.253
-    10.0.255.254
-    10.0.255.255
-
-You can pass it as many subnets as you want:
-
-    $ ipgen.py 192.168.0.0/30 1.2.3.4/32 10.0.0.0/255.255.255.128
-    192.168.0.0
-    192.168.0.1
-    192.168.0.2
-    192.168.0.3
-    1.2.3.4
-    10.0.0.0
-    10.0.0.1
-    10.0.0.2
-    ...
-    10.0.0.125
-    10.0.0.126
-    10.0.0.127
-
-TODO: show templating example
+See [ipgen(1)] manpage.
 
 
 License
 -------
 
-See LICENSE file.
+See [LICENSE] file.
 
 
 Contact
@@ -59,3 +21,7 @@ Contact
 
 * Web: <https://github.com/mlafeldt/ipgen>
 * Mail: <mathias.lafeldt@gmail.com>
+
+
+[ipgen(1)]: http://mlafeldt.github.com/ipgen/ipgen.1.html
+[LICENSE]: https://github.com/mlafeldt/ipgen/blob/master/LICENSE

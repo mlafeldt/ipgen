@@ -22,7 +22,7 @@ def int_to_dqn(n):
 
 def cidr_to_int(cidr):
     """Convert CIDR to long integer"""
-    return 0xffffffff ^ (1L << 32 - cidr) - 1
+    return 0xffffffff ^ (1 << 32 - cidr) - 1
 
 
 def ip_generator(ip, mask):
@@ -74,10 +74,10 @@ def main():
 
         if opts.template:
             for ip in ip_generator(ip_num, mask_num):
-                print '\n'.join((l.replace(IP_IDENT, ip) for l in lines))
+                print('\n'.join((l.replace(IP_IDENT, ip) for l in lines)))
         else:
             for ip in ip_generator(ip_num, mask_num):
-                print ip
+                print(ip)
 
 if __name__ == '__main__':
     try:

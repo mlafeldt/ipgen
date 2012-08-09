@@ -76,7 +76,8 @@ def main():
             for ip in ip_generator(ip_num, mask_num):
                 print '\n'.join((l.replace(IP_IDENT, ip) for l in lines))
         else:
-            print '\n'.join(ip_generator(ip_num, mask_num))
+            for ip in ip_generator(ip_num, mask_num):
+                print ip
 
 if __name__ == '__main__':
     try:
